@@ -8,77 +8,62 @@ import robot from "../../assets/images/robot.png";
 
 function LeftPanel() {
   return (
-    <div className="relative overflow-hidden bg-linear-to-br from-blue-50 via-white to-indigo-100 p-6 md:p-10 xl:p-14">
+    <div className="relative overflow-hidden bg-linear-to-br from-blue-50 via-white to-indigo-100 p-8 lg:p-10">
         {/* Background Decorations */}
 
-      <div className="absolute -top-20 -right-20 w-72 h-72 bg-blue-200 opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute -top-20 -right-20 w-72 h-72 bg-blue-200 opacity-20 rounded-full blur-3xl"></div>
 
-      <div className="absolute bottom-10 left-10 w-24 h-24 bg-indigo-300 opacity-20 rounded-full blur-xl"></div>
+        <div className="absolute bottom-10 left-10 w-24 h-24 bg-indigo-300 opacity-20 rounded-full blur-xl"></div>
 
-      <div className="absolute top-1/2 left-5 w-5 h-5 bg-blue-400 rounded-full"></div>
+        <div className="absolute top-1/2 left-5 w-5 h-5 bg-blue-400 rounded-full"></div>
 
-      <div className="absolute top-32 right-40 w-4 h-4 bg-purple-300 rounded-full"></div>
-      {/* Logo */}
-      <div className="flex items-center gap-3">
+        <div className="absolute top-32 right-40 w-4 h-4 bg-purple-300 rounded-full"></div>
+        {/* Logo */}
+        <div className="flex items-center gap-3">
 
-        <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center">
-            <FaRobot className="text-white text-2xl" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
+                <FaRobot className="text-white text-2xl" />
+            </div>
+
+            <div className="flex items-center gap-2">
+            <h1 className="text-[18px] font-bold tracking-tight text-slate-900">
+                InterviewIQ
+            </h1>
+
+            <span className="rounded-md bg-blue-600 px-2 py-0.5 text-[10px] font-semibold text-white">
+                AI
+            </span>
+            </div>
+
         </div>
 
-        <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-bold text-slate-900">
-            InterviewIQ
-          </h1>
+        <div className="mt-20">
 
-          <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-lg">
-            AI
-          </span>
+            <h2 className="text-[18px] font-bold leading-[1.15] tracking-[-0.03em] text-slate-900">
+                Practice
+                <span className="text-blue-600"> Smarter.</span>
+                <br />
+                Get Hired
+                <span className="text-blue-600"> Faster.</span>
+            </h2>
+
+            <p className="mt-6 max-w-[420px] text-[18px] leading-8 text-slate-600">
+
+                AI-powered mock interviews,
+                real-time feedback,
+                resume analysis,
+                and personalized learning roadmap.
+
+            </p>
+
         </div>
 
-      </div>
-
-      <div className="mt-20">
-
-        <h2 className="text-4xl md:text-5xl xl:text-6xl font-bold leading-tight">
-
-            Practice
-
-            <span className="text-blue-600">
-            {" "}Smarter.
-            </span>
-
-            <br />
-
-            Get Hired
-
-            <span className="text-blue-600">
-            {" "}Faster.
-            </span>
-
-        </h2>
-
-        <p className="text-gray-600 text-base md:text-lg xl:text-xl mt-8 leading-9">
-
-            AI-powered mock interviews,
-            real-time feedback,
-            resume analysis,
-            and personalized learning roadmap.
-
-        </p>
-
-      </div>
-
-      <div className="rounded-2xl bg-white/90 backdrop-blur-md shadow-xl p-5 border border-gray-100">
-
+        <div className="relative mx-auto mt-10 w-full max-w-[420px] overflow-hidden p-6">
+            
             <img
                 src={robot}
                 alt="Robot"
-                className="
-                    mx-auto
-                    w-48
-                    md:w-64
-                    xl:w-80
-                    "
+                className="mx-auto w-[90%] object-contain"
             />
 
             {/* Card 1 */}
@@ -125,49 +110,54 @@ function LeftPanel() {
 
         </div>
 
-        <div className="mt-10 md:mt-16 space-y-5">
+        <div className="mt-12 max-w-[260px] mx-auto space-y-8">
+            <div className="flex items-start gap-4 max-w-[280px] mx-auto">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600">
+                    <FaFileAlt className="text-sm text-white" />
+                </div>
 
-            <div className="flex gap-4">
-                <div className="text-3xl"><FaFileAlt className="text-3xl text-blue-600" /></div>
-
-                <div>
-                <h3 className="font-semibold text-lg">
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
                     AI Resume Analysis
-                </h3>
+                    </h3>
 
-                <p className="text-gray-500">
-                    Improve your resume and beat ATS.
-                </p>
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Improve your resume and beat the ATS.
+                    </p>
                 </div>
             </div>
 
-            <div className="flex gap-4">
-                <div className="text-3xl"><FaMicrophone className="text-3xl text-green-600" /></div>
+            <div className="flex items-start gap-4 max-w-[280px] mx-auto">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500">
+                    <FaMicrophone className="text-sm text-white" />
+                </div>
 
-                <div>
-                <h3 className="font-semibold text-lg">
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
                     Mock Interviews
-                </h3>
+                    </h3>
 
-                <p className="text-gray-500">
-                    Practice with an AI interviewer.
-                </p>
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Practice role-based interviews with AI interviewer.
+                    </p>
                 </div>
             </div>
+            <div className="flex items-start gap-4 max-w-[280px] mx-auto">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500">
+                    <FaChartBar className="text-sm text-white" />
+                </div>
 
-            <div className="flex gap-4">
-                <div className="text-3xl"><FaChartBar className="text-3xl text-purple-600" /></div>
-
-                <div>
-                <h3 className="font-semibold text-lg">
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
                     Smart Feedback
-                </h3>
+                    </h3>
 
-                <p className="text-gray-500">
-                    Get detailed reports after every interview.
-                </p>
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Get detailed feedback and track your progress.
+                    </p>
                 </div>
             </div>
+       
 
         </div>
 

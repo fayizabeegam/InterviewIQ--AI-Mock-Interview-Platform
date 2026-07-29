@@ -3,16 +3,20 @@ import Container from "../common/Container";
 
 function AuthLayout({ children }) {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center py-6">
+    <div className="min-h-screen py-6">
       <Container>
-        <div className="overflow-hidden rounded-3xl bg-white shadow-xl grid grid-cols-1 lg:grid-cols-2">
+        <div className="mx-auto max-w-[1400px] overflow-hidden rounded-3xl  shadow-xl">
 
-          {/* Left Side */}
-          <LeftPanel />
+          <div className="grid min-h-[900px] grid grid-cols-1 lg:grid-cols-[1fr_1fr]">
 
-          {/* Right Side */}
-          <div className="flex items-center justify-center p-6 md:p-10 xl:p-12">
-            {children}
+            {/* Left */}
+            <LeftPanel />
+
+            {/* Right */}
+            <div className="flex justify-center px-10 py-12 lg:px-12">
+              {children}
+            </div>
+
           </div>
 
         </div>

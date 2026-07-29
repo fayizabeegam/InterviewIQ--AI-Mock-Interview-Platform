@@ -24,15 +24,31 @@ function Input({
 
       {/* Input */}
       <input
-        type={isPassword && showPassword ? "text" : type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        className={`w-full rounded-2xl border border-gray-300 py-4 ${
-          icon ? "pl-12" : "pl-4"
-        } ${isPassword ? "pr-12" : "pr-4"} outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 ${className}`}
-      />
-
+            name={name}
+            type={isPassword && showPassword ? "text" : type}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            className={`
+                h-14
+                w-full
+                rounded-xl
+                border
+                border-[#D8DEE9]
+                bg-white
+                pl-12
+                ${isPassword ? "pr-12" : "pr-4"}
+                text-[15px]
+                text-slate-800
+                placeholder:text-[#A3A3A3]
+                outline-none
+                transition-all
+                focus:border-[#3B82F6]
+                focus:ring-4
+                focus:ring-blue-100
+                ${className}
+            `}
+        />
       {/* Password Toggle */}
       {isPassword && (
         <button

@@ -12,7 +12,9 @@ import {
   FaGoogle,
   FaGithub,
   FaLinkedin,
+
 } from "react-icons/fa";
+import { PiHandWavingFill } from "react-icons/pi";
 import Input from "../common/Input";
 import SocialButton from "../common/SocialButton";
 import Button from "../common/Button";
@@ -33,32 +35,38 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex items-center justify-center p-6 md:p-10 xl:p-12">
-      <div className="w-full max-w-md">
+    <div className="">
+      <div className="mx-auto w-full max-w-[420px]">
 
         {/* Register Link */}
-        <div className="mb-10 text-right">
-          <span className="text-gray-500">New here? </span>
-          <button className="font-semibold text-blue-600 hover:underline">
+        <div className="mb-16 flex justify-end text-sm">
+          <span className="text-[#6B7280]">
+            New here?
+          </span>
+
+          <button className="ml-1 font-semibold text-[#2563EB] hover:underline">
             Create an account
           </button>
         </div>
 
         {/* Heading */}
-        <h1 className="mb-2 text-xl font-bold text-slate-900">
-          Welcome Back!👋
-        </h1>
+        <div className="mb-10">
+          <h1 className="flex items-center gap-3 text-[38px] font-bold leading-tight text-slate-900">
+              <span>Welcome Back!</span>
+              <PiHandWavingFill className="text-yellow-400 text-[38px]" />
+          </h1>
 
-        <p className="mb-10 text-gray-500">
-          Login to continue your interview journey
-        </p>
+          <p className="mt-3 text-[15px] leading-6 text-slate-500">
+            Login to continue your interview journey
+          </p>
+        </div>
 
         {/* Email */}
-        <div className="relative mb-6">
-          <Mail
-            size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-          />
+        
+        <div className="mb-6">
+          <label className="mb-2 block text-left text-sm font-medium text-slate-700">
+            Email address
+          </label>
 
           <Input
             type="email"
