@@ -3,7 +3,7 @@ import LoginForm from "../../components/auth/LoginForm";
 
 function Login() {
   return (
-    <AuthLayout>
+    <AuthLayout variant="login">
       <LoginForm />
     </AuthLayout>
   );

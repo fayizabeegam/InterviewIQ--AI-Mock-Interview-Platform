@@ -3,10 +3,16 @@ import {
   FaFileAlt,
   FaMicrophone,
   FaChartBar,
+  FaLaptopCode,
+  FaRoute,
 } from "react-icons/fa";
 import robot from "../../assets/images/robot.png";
+import rrobo from "../../assets/images/rrobo.png";
 
-function LeftPanel() {
+function LeftPanel({variant }) {
+
+  const isRegister = variant === "register";
+
   return (
     <div className="relative overflow-hidden bg-linear-to-br from-blue-50 via-white to-indigo-100 p-8 lg:p-10">
         {/* Background Decorations */}
@@ -37,15 +43,36 @@ function LeftPanel() {
 
         </div>
 
-        <div className="mt-20">
+        <div className="mt-20 flex flex-col items-start text-left">
+            {isRegister ? (
+            <>
+            <h1 className="text-[28px] leading-[1.25] font-bold text-slate-900">
+                Create Account
+                <br />
+                {" "}
+                <span className="text-blue-600">
+                    Start Practicing Smarter
+                </span>
+            </h1>
 
-            <h2 className="text-[18px] font-bold leading-[1.15] tracking-[-0.03em] text-slate-900">
+            <p className="mt-6 max-w-[420px] text-[18px] leading-8 text-slate-600">
+              Join thousands job seekers who are 
+              : improving their skills and cracking interviews with{" "}
+              <span className="font-semibold text-blue-600">
+                InterviewIQ
+              </span>
+            </p>
+            </>
+            ):(
+            <>
+            <h1 className="text-[18px] font-bold leading-[1.15] tracking-[-0.03em] text-slate-900">
                 Practice
                 <span className="text-blue-600"> Smarter.</span>
                 <br />
                 Get Hired
                 <span className="text-blue-600"> Faster.</span>
-            </h2>
+            </h1>
+
 
             <p className="mt-6 max-w-[420px] text-[18px] leading-8 text-slate-600">
 
@@ -55,11 +82,21 @@ function LeftPanel() {
                 and personalized learning roadmap.
 
             </p>
-
+            </> 
+            )}
         </div>
 
         <div className="relative mx-auto mt-10 w-full max-w-[420px] overflow-hidden p-6">
-            
+            {isRegister ? (
+            <>
+            <img
+                src={rrobo}
+                alt="Robot"
+                className="mx-auto w-[90%] object-contain"
+            />
+            </>
+            ):(
+            <>
             <img
                 src={robot}
                 alt="Robot"
@@ -107,9 +144,84 @@ function LeftPanel() {
                 </p>
 
             </div>
+            </>
+            )}
 
         </div>
 
+        {isRegister ? (
+            <div className="mt-12 max-w-[280px] mx-auto space-y-8">
+
+                {/* AI Resume Analysis */}
+                <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600">
+                    <FaFileAlt className="text-sm text-white" />
+                </div>
+
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
+                    AI Resume Analysis
+                    </h3>
+
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Optimize your resume to improve ATS compatibility.
+                    </p>
+                </div>
+                </div>
+
+                {/* Mock Interviews */}
+                <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500">
+                    <FaMicrophone className="text-sm text-white" />
+                </div>
+
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
+                    Mock Interviews
+                    </h3>
+
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Practice realistic interviews with an AI interviewer.
+                    </p>
+                </div>
+                </div>
+
+                {/* Coding Assessments */}
+                <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500">
+                    <FaLaptopCode className="text-sm text-white" />
+                </div>
+
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
+                    Coding Assessments
+                    </h3>
+
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Solve coding challenges and improve problem-solving skills.
+                    </p>
+                </div>
+                </div>
+
+                {/* Personalized Roadmap */}
+                <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500">
+                    <FaRoute className="text-sm text-white" />
+                </div>
+
+                <div className="flex-1 text-left">
+                    <h3 className="text-[16px] font-semibold text-slate-900">
+                    Personalized Roadmap
+                    </h3>
+
+                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
+                    Follow a customized learning path based on your goals.
+                    </p>
+                </div>
+                </div>
+
+            </div>
+            ) : (
         <div className="mt-12 max-w-[260px] mx-auto space-y-8">
             <div className="flex items-start gap-4 max-w-[280px] mx-auto">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600">
@@ -160,6 +272,7 @@ function LeftPanel() {
        
 
         </div>
+            )}
 
     </div>
   );

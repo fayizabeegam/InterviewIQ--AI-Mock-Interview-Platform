@@ -1,8 +1,12 @@
+import AuthLayout from "../../components/auth/AuthLayout";
+import RegisterForm from "../../components/auth/RegisterForm"
+
+
 function Register() {
   return (
-    <h1 className="text-3xl text-center mt-10">
-      Register Page
-    </h1>
+    <AuthLayout variant="register">
+      <RegisterForm />
+    </AuthLayout>
   );
 }
 
