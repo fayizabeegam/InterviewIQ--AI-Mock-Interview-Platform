@@ -1,3 +1,4 @@
+import React from "react";
 import { Text } from "@react-email/components";
 
 import EmailLayout from "../components/EmailLayout";
@@ -6,11 +7,12 @@ import OTPCard from "../components/OtpCard";
 import EmailFooter from "../components/Footer";
 
 export default function VerificationEmail({
-  name = "User",
-  otp = "123456",
+  name = "{{NAME}}",
+  otp = "{{OTP}}",
 }) {
   return (
     <EmailLayout preview="Verify your InterviewIQ account">
+
       <EmailHeader
         title="Email Verification"
         subtitle="AI-Powered Interview Preparation Platform"
@@ -44,12 +46,14 @@ export default function VerificationEmail({
           lineHeight: "26px",
         }}
       >
-        Please use the verification code below to verify your email address.
+        Please use the verification code below to verify your
+        email address.
       </Text>
 
       <OTPCard otp={otp} />
 
       <EmailFooter />
+
     </EmailLayout>
   );
 }

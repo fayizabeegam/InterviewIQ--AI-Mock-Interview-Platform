@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Body,
   Container,
@@ -21,8 +22,7 @@ export default function EmailLayout({
           backgroundColor: "#f4f7fb",
           margin: 0,
           padding: "40px 0",
-          fontFamily:
-            "Inter, Arial, Helvetica, sans-serif",
+          fontFamily: "Inter, Arial, Helvetica, sans-serif",
         }}
       >
         <Container
@@ -32,8 +32,7 @@ export default function EmailLayout({
             backgroundColor: "#ffffff",
             borderRadius: "12px",
             padding: "40px",
-            boxShadow:
-              "0 4px 20px rgba(0,0,0,.08)",
+            boxShadow: "0 4px 20px rgba(0,0,0,.08)",
           }}
         >
           {children}

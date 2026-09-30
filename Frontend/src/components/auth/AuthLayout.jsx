@@ -1,27 +1,31 @@
 import LeftPanel from "./LeftPanel";
-import Container from "../common/Container";
 
 function AuthLayout({ children, variant = "login" }) {
   return (
-    <div className="min-h-screen py-6">
-      <Container>
-        <div className="mx-auto max-w-[1400px] overflow-hidden rounded-3xl  shadow-xl">
+    <main className="min-h-screen bg-white">
+      <div className="grid min-h-screen lg:grid-cols-[46%_54%]">
 
-          <div className="grid min-h-[900px] grid grid-cols-1 lg:grid-cols-[1fr_1fr]">
+        {/* Visual / Product panel */}
+        <div className="hidden lg:block">
+          <LeftPanel variant={variant} />
+        </div>
 
-            {/* Left */}
-            <LeftPanel variant={variant} />
+        {/* Form */}
+        <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-10 sm:px-8 lg:px-12">
 
-            {/* Right */}
-            <div className="flex justify-center px-10 py-12 lg:px-12">
-              {children}
-            </div>
+          {/* Background glow */}
+          <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-blue-100/50 blur-[100px]" />
 
+          <div className="pointer-events-none absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-indigo-100/40 blur-[110px]" />
+
+          <div className="relative z-10 w-full max-w-[430px]">
+            {children}
           </div>
 
-        </div>
-      </Container>
-    </div>
+        </section>
+
+      </div>
+    </main>
   );
 }
 

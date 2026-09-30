@@ -3,6 +3,7 @@ import Container from "../../components/common/Container";
 import PageHeader from "../../components/common/PageHeader";
 
 function Dashboard() {
+
   return (
     <DashboardLayout>
 
@@ -30,6 +31,8 @@ function Dashboard() {
           <div className="rounded-xl bg-white p-6 shadow">
             Card
           </div>
+
+        
 
         </div>
 

@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from accounts.models import*
 import re
+from core.utils.password_validator import*
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True,min_length=8,
@@ -28,42 +29,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def validate_password(self, value):
-        if len(value)<8:
-            raise serializers.ValidationError(
-                "Password must be at least 8 characters long."
-            )
-
-        if not re.search(r"[A-Z]",value):
-             raise serializers.ValidationError(
-                "Password must contain at least one uppercase letter."
-            )
-
-        if not re.search(r"[a-z]",value):
-            raise serializers.ValidationError(
-                "Password must contain at least one lowercase letter."
-            )
-
-        if not re.search(r"\d",value):
-            raise serializers.ValidationError(
-                "Password must contain at least one number."
-            )
-
-        if not re.search(r'[!@#$%^&*()_\-+=\[\]{};:"\\|,.<>/?]', value):
-            raise serializers.ValidationError(
-                "Password must contain at least one special character."
-            )
-         
-        return value
-
+        return validate_password_strength(value)
 
     def validate(self, attrs):
-        if attrs["password"] != attrs["confirm_password"]:
-            raise serializers.ValidationError(
-                {
-                    "confirm_password": "Passwords do not match."
-                }
-            )
+        validate_password_match(
+            attrs["password"],
+            attrs["confirm_password"],
+        )
         return attrs
+
 
     def create(self, validated_data):
         validated_data.pop("confirm_password")
@@ -111,19 +85,96 @@ class LoginSerializer(serializers.Serializer):
     def validate(self, attrs):
         username = attrs.get("username")
         password = attrs.get("password")
-        user = authenticate(username=username,password=password)
+
+        # Find user by username OR email
+        user = User.objects.filter(username=username).first()
+
+        if not user:
+            user = User.objects.filter(email=username).first()
 
         if not user:
             raise serializers.ValidationError(
                 "Invalid email or password."
+            )
+
+         # Check password
+        if not user.check_password(password):
+            raise serializers.ValidationError(
+                "Invalid username/email or password."
             )
         
         if not user.is_active:
             raise serializers.ValidationError(
                 "Account is disabled."
             )
+
+        if not user.is_email_verified:
+            raise serializers.ValidationError(
+                "Please verify your email before logging in."
+            )
+        
         attrs["user"] = user
         return attrs
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                "No account found with this email."
+            )
+        return value
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate_password(self, value):
+        return validate_password_strength(value)
+
+    def validate(self, attrs):
+        validate_password_match(
+            attrs["password"],
+            attrs["confirm_password"],
+        )
+        return attrs
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    otp = serializers.CharField(max_length=6)
+
+    password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+    )
+
+    confirm_password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+    )
+
+    def validate_password(self, value):
+        return validate_password_strength(value)
+
+    def validate(self, attrs):
+        validate_password_match(
+            attrs["password"],
+            attrs["confirm_password"],
+        )
+        return attrs
+
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+
+
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

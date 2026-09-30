@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
     "accounts",
     "dashboard",
     "resumes",
@@ -142,6 +143,8 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 
+
+# OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
 
 EMAIL_BACKEND = config("EMAIL_BACKEND")
 

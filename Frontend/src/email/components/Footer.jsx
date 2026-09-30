@@ -1,6 +1,7 @@
+import React from "react";
 import { Hr, Text } from "@react-email/components";
 
-export default function EmailFooter() {
+export default function EmailFooter({ type = "otp" }) {
   return (
     <>
       <Hr />
@@ -13,7 +14,9 @@ export default function EmailFooter() {
           lineHeight: "22px",
         }}
       >
-        This OTP is valid for 10 minutes.
+        {type === "otp"
+        ?"This OTP is valid for 10 minutes."
+        : "This password reset link will expire automatically."}
       </Text>
 
       <Text

@@ -1,3 +1,4 @@
+import React from "react";
 import { Heading, Text } from "@react-email/components";
 
 export default function EmailHeader({ title, subtitle }) {

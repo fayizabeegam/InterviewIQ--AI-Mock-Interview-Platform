@@ -1,278 +1,304 @@
+import { FaRobot } from "react-icons/fa";
 import {
-  FaRobot,
-  FaFileAlt,
-  FaMicrophone,
-  FaChartBar,
-  FaLaptopCode,
-  FaRoute,
-} from "react-icons/fa";
-import robot from "../../assets/images/robot.png";
-import rrobo from "../../assets/images/rrobo.png";
+  ArrowLeft,
+  BarChart3,
+  CheckCircle2,
+  MessageSquare,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-function LeftPanel({variant }) {
-
+function LeftPanel({ variant }) {
+  const navigate = useNavigate();
   const isRegister = variant === "register";
 
   return (
-    <div className="relative overflow-hidden bg-linear-to-br from-blue-50 via-white to-indigo-100 p-8 lg:p-10">
-        {/* Background Decorations */}
+    <aside className="relative flex min-h-screen flex-col overflow-hidden bg-slate-950 p-8 text-white lg:p-10 xl:p-12">
 
-        <div className="absolute -top-20 -right-20 w-72 h-72 bg-blue-200 opacity-20 rounded-full blur-3xl"></div>
+      {/* =====================================================
+          BACKGROUND
+      ===================================================== */}
+      <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[130px]" />
 
-        <div className="absolute bottom-10 left-10 w-24 h-24 bg-indigo-300 opacity-20 rounded-full blur-xl"></div>
+      <div className="pointer-events-none absolute -bottom-40 right-0 h-[500px] w-[500px] rounded-full bg-violet-600/15 blur-[130px]" />
 
-        <div className="absolute top-1/2 left-5 w-5 h-5 bg-blue-400 rounded-full"></div>
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px)
+          `,
+          backgroundSize: "48px 48px",
+        }}
+      />
 
-        <div className="absolute top-32 right-40 w-4 h-4 bg-purple-300 rounded-full"></div>
-        {/* Logo */}
-        <div className="flex items-center gap-3">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
-                <FaRobot className="text-white text-2xl" />
+      {/* =====================================================
+          LOGO
+      ===================================================== */}
+      <div className="relative z-10 flex items-center justify-between">
+
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="group flex items-center gap-3"
+        >
+          <div className="relative">
+
+            <div className="absolute inset-0 rounded-xl bg-blue-500 opacity-30 blur-lg" />
+
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
+              <FaRobot className="text-xl text-white" />
             </div>
 
-            <div className="flex items-center gap-2">
-            <h1 className="text-[18px] font-bold tracking-tight text-slate-900">
-                InterviewIQ
-            </h1>
+          </div>
 
-            <span className="rounded-md bg-blue-600 px-2 py-0.5 text-[10px] font-semibold text-white">
-                AI
+          <div className="flex items-center gap-2">
+
+            <span className="text-[18px] font-bold tracking-tight text-white">
+              InterviewIQ
             </span>
-            </div>
+
+            <span className="rounded-md border border-blue-400/20 bg-blue-500/10 px-1.5 py-0.5 text-[9px] font-bold text-blue-400">
+              AI
+            </span>
+
+          </div>
+        </button>
+
+
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-xs font-medium text-slate-500 transition hover:text-white"
+        >
+          <ArrowLeft size={14} />
+          Home
+        </button>
+
+      </div>
+
+
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
+      <div className="relative z-10 my-auto py-12">
+
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1.5">
+
+          <Sparkles
+            size={12}
+            className="text-blue-400"
+          />
+
+          <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">
+            {isRegister
+              ? "Start your interview journey"
+              : "Your AI interview coach"}
+          </span>
 
         </div>
 
-        <div className="mt-20 flex flex-col items-start text-left">
-            {isRegister ? (
-            <>
-            <h1 className="text-[28px] leading-[1.25] font-bold text-slate-900">
-                Create Account
-                <br />
-                {" "}
-                <span className="text-blue-600">
-                    Start Practicing Smarter
-                </span>
-            </h1>
 
-            <p className="mt-6 max-w-[420px] text-[18px] leading-8 text-slate-600">
-              Join thousands job seekers who are 
-              : improving their skills and cracking interviews with{" "}
-              <span className="font-semibold text-blue-600">
-                InterviewIQ
+        <h1 className="mt-6 max-w-lg text-4xl font-bold leading-[1.1] tracking-[-0.03em] xl:text-[46px]">
+
+          {isRegister ? (
+            <>
+              <span className="text-white">Build confidence before</span>
+              <span className="block bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+                the real interview.
               </span>
-            </p>
             </>
-            ):(
+          ) : (
             <>
-            <h1 className="text-[18px] font-bold leading-[1.15] tracking-[-0.03em] text-slate-900">
-                Practice
-                <span className="text-blue-600"> Smarter.</span>
-                <br />
-                Get Hired
-                <span className="text-blue-600"> Faster.</span>
-            </h1>
-
-
-            <p className="mt-6 max-w-[420px] text-[18px] leading-8 text-slate-600">
-
-                AI-powered mock interviews,
-                real-time feedback,
-                resume analysis,
-                and personalized learning roadmap.
-
-            </p>
-            </> 
-            )}
-        </div>
-
-        <div className="relative mx-auto mt-10 w-full max-w-[420px] overflow-hidden p-6">
-            {isRegister ? (
-            <>
-            <img
-                src={rrobo}
-                alt="Robot"
-                className="mx-auto w-[90%] object-contain"
-            />
+              <span className="text-white">Practice smarter.</span>
+              <span className="block bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+                Interview better.
+              </span>
             </>
-            ):(
-            <>
-            <img
-                src={robot}
-                alt="Robot"
-                className="mx-auto w-[90%] object-contain"
-            />
+          )}
 
-            {/* Card 1 */}
+        </h1>
 
-            <div className=" hidden lg:block absolute left-0 top-8 rounded-2xl bg-white shadow-lg p-4">
 
-                <h4 className="font-semibold">
-                    AI Feedback
-                </h4>
+        <p className="mt-5 max-w-md text-sm leading-7 text-slate-400">
+          {isRegister
+            ? "Create your account and start practicing realistic interviews with personalized AI feedback."
+            : "Practice role-specific interviews, understand your performance, and improve with every session."}
+        </p>
 
-                <p className="text-green-500 text-2xl font-bold">
-                    86
+
+        {/* =====================================================
+            PRODUCT PREVIEW
+        ===================================================== */}
+        <div className="relative mt-10 max-w-[540px]">
+
+          <div className="overflow-hidden rounded-[26px] border border-white/[0.09] bg-white/[0.045] p-2 backdrop-blur-xl">
+
+            <div className="rounded-[20px] bg-[#111c30] p-5">
+
+              {/* Top */}
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3">
+
+                  <div className="relative">
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
+                      <FaRobot size={17} />
+                    </div>
+
+                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#111c30] bg-green-400" />
+
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-semibold">
+                      AI Mock Interview
+                    </p>
+
+                    <p className="mt-1 text-[9px] text-slate-500">
+                      Python Developer
+                    </p>
+                  </div>
+
+                </div>
+
+
+                <span className="rounded-full bg-green-500/10 px-2.5 py-1 text-[9px] font-bold text-green-400">
+                  LIVE
+                </span>
+
+              </div>
+
+
+              {/* Question */}
+              <div className="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.04] p-4">
+
+                <div className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-wide text-blue-400">
+                  <Sparkles size={11} />
+                  AI Interviewer
+                </div>
+
+                <p className="mt-3 text-xs leading-6 text-slate-300">
+                  “How would you design and secure a REST API using
+                  Django REST Framework?”
                 </p>
 
+              </div>
+
+
+              {/* Wave */}
+              <div className="mt-4 rounded-xl bg-blue-500/[0.07] p-4">
+
+                <div className="flex items-center justify-between">
+
+                  <span className="text-[9px] font-medium text-slate-400">
+                    Your answer
+                  </span>
+
+                  <span className="flex items-center gap-1.5 text-[9px] text-green-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                    Listening
+                  </span>
+
+                </div>
+
+
+                <div className="mt-4 flex h-9 items-center justify-center gap-1">
+
+                  {[
+                    10, 18, 27, 15, 32, 22, 35,
+                    18, 28, 14, 31, 20, 26, 12,
+                  ].map((height, index) => (
+                    <span
+                      key={index}
+                      style={{ height }}
+                      className="w-[3px] rounded-full bg-blue-400"
+                    />
+                  ))}
+
+                </div>
+
+              </div>
+
             </div>
 
-            {/* Card 2 */}
+          </div>
 
-            <div className="absolute right-0 top-20 rounded-2xl bg-white shadow-lg p-4">
 
-                <h4 className="font-semibold">
-                    ATS Score
-                </h4>
+          {/* Floating score */}
+          <div className="absolute -bottom-5 -right-4 hidden rounded-xl border border-white/10 bg-slate-900/95 p-3 shadow-2xl xl:block">
 
-                <p className="text-blue-600 text-2xl font-bold">
-                    91
+            <div className="flex items-center gap-3">
+
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/10 text-green-400">
+                <TrendingUp size={14} />
+              </div>
+
+              <div>
+                <p className="text-[8px] text-slate-500">
+                  Performance
                 </p>
 
-            </div>
-
-            {/* Card 3 */}
-
-            <div className="absolute right-4 bottom-6 rounded-2xl bg-white shadow-lg p-4">
-
-                <h4 className="font-semibold">
-                    Interview
-                </h4>
-
-                <p className="text-purple-500 text-2xl font-bold">
-                    +12%
+                <p className="text-xs font-bold text-white">
+                  8.6 / 10
                 </p>
+              </div>
 
             </div>
-            </>
-            )}
+
+          </div>
 
         </div>
 
-        {isRegister ? (
-            <div className="mt-12 max-w-[280px] mx-auto space-y-8">
 
-                {/* AI Resume Analysis */}
-                <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600">
-                    <FaFileAlt className="text-sm text-white" />
-                </div>
+        {/* =====================================================
+            BENEFITS
+        ===================================================== */}
+        <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
 
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    AI Resume Analysis
-                    </h3>
+          <AuthBenefit
+            icon={<MessageSquare size={12} />}
+            text="AI feedback"
+          />
 
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Optimize your resume to improve ATS compatibility.
-                    </p>
-                </div>
-                </div>
+          <AuthBenefit
+            icon={<BarChart3 size={12} />}
+            text="Progress tracking"
+          />
 
-                {/* Mock Interviews */}
-                <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500">
-                    <FaMicrophone className="text-sm text-white" />
-                </div>
-
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    Mock Interviews
-                    </h3>
-
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Practice realistic interviews with an AI interviewer.
-                    </p>
-                </div>
-                </div>
-
-                {/* Coding Assessments */}
-                <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500">
-                    <FaLaptopCode className="text-sm text-white" />
-                </div>
-
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    Coding Assessments
-                    </h3>
-
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Solve coding challenges and improve problem-solving skills.
-                    </p>
-                </div>
-                </div>
-
-                {/* Personalized Roadmap */}
-                <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500">
-                    <FaRoute className="text-sm text-white" />
-                </div>
-
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    Personalized Roadmap
-                    </h3>
-
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Follow a customized learning path based on your goals.
-                    </p>
-                </div>
-                </div>
-
-            </div>
-            ) : (
-        <div className="mt-12 max-w-[260px] mx-auto space-y-8">
-            <div className="flex items-start gap-4 max-w-[280px] mx-auto">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600">
-                    <FaFileAlt className="text-sm text-white" />
-                </div>
-
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    AI Resume Analysis
-                    </h3>
-
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Improve your resume and beat the ATS.
-                    </p>
-                </div>
-            </div>
-
-            <div className="flex items-start gap-4 max-w-[280px] mx-auto">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500">
-                    <FaMicrophone className="text-sm text-white" />
-                </div>
-
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    Mock Interviews
-                    </h3>
-
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Practice role-based interviews with AI interviewer.
-                    </p>
-                </div>
-            </div>
-            <div className="flex items-start gap-4 max-w-[280px] mx-auto">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500">
-                    <FaChartBar className="text-sm text-white" />
-                </div>
-
-                <div className="flex-1 text-left">
-                    <h3 className="text-[16px] font-semibold text-slate-900">
-                    Smart Feedback
-                    </h3>
-
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                    Get detailed feedback and track your progress.
-                    </p>
-                </div>
-            </div>
-       
+          <AuthBenefit
+            icon={<CheckCircle2 size={12} />}
+            text="Role-specific practice"
+          />
 
         </div>
-            )}
+
+      </div>
+
+
+      {/* Bottom */}
+      <p className="relative z-10 text-[10px] text-slate-600">
+        AI-powered interview preparation platform
+      </p>
+
+    </aside>
+  );
+}
+
+
+function AuthBenefit({ icon, text }) {
+  return (
+    <div className="flex items-center gap-2 text-[10px] font-medium text-slate-500">
+
+      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/[0.05] text-blue-400">
+        {icon}
+      </div>
+
+      {text}
 
     </div>
   );

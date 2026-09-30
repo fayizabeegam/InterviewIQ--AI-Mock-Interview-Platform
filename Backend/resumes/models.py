@@ -97,18 +97,17 @@ class Project(models.Model):
 
 class Skill(models.Model):
     SkillsCategory=(
-        ("PROGRAMMING", "Programming Language"),
-        ("FRONTEND", "Frontend"),
-        ("BACKEND", "Backend"),
-        ("MOBILE", "Mobile Development"),
-        ("DATABASE", "Database"),
-        ("DEVOPS", "DevOps"),
-        ("CLOUD", "Cloud"),
-        ("DATA_AI", "Data Science & AI"),
-        ("TESTING", "Testing / QA"),
-        ("TOOL", "Tools"),
-        ("SOFT_SKILL", "Soft Skill"),
-        ("OTHER", "Other")
+        ("TECHNICAL", "Technical Skills"),
+        ("TOOLS_TECHNOLOGIES", "Tools & Technologies"),
+        ("DOMAIN_KNOWLEDGE", "Domain Knowledge"),
+        ("MANAGEMENT", "Management"),
+        ("COMMUNICATION", "Communication"),
+        ("LEADERSHIP", "Leadership"),
+        ("ANALYTICAL", "Analytical Skills"),
+        ("CREATIVE", "Creative Skills"),
+        ("LANGUAGE", "Languages"),
+        ("SOFT_SKILL", "Soft Skills"),
+        ("OTHER", "Other"),
     )
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,
                           editable=False)
@@ -165,3 +164,44 @@ class UserSkill(models.Model):
         if self.skill:
             return self.skill.name
         return self.other_skill
+
+
+class Certification(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    resume = models.ForeignKey(Resume,on_delete=models.CASCADE,related_name="certifications")
+    name = models.CharField(max_length=255)
+    issuer = models.CharField(max_length=255,blank=True)
+    start_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Language(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    resume = models.ForeignKey(Resume,on_delete=models.CASCADE,related_name="languages")
+    name = models.CharField(max_length=100)
+    proficiency = models.CharField(max_length=150,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ATSAnalysis(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    resume = models.OneToOneField(Resume,on_delete=models.CASCADE,
+                                  related_name="ats_analysis")
+    score = models.DecimalField(max_digits=5,decimal_places=2,default=0)
+    summary = models.TextField(blank=True)
+    strengths = models.JSONField(default=list,blank=True)
+    weaknesses = models.JSONField(default=list,blank=True)
+    suggestions = models.JSONField(default=list,blank=True)
+    section_scores = models.JSONField(default=dict,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"ATS Analysis - {self.resume.title}"
