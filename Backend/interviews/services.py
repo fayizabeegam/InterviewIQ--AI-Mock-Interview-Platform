@@ -1,14 +1,24 @@
 import json
 from faster_whisper import WhisperModel
 
-whisper_model = WhisperModel(
-    "base",
-    device="cpu",
-    compute_type="int8"
-)
+whisper_model = None
+
+
+def get_whisper_model():
+    global whisper_model
+
+    if whisper_model is None:
+        whisper_model = WhisperModel(
+            "base",
+            device="cpu",
+            compute_type="int8"
+        )
+
+    return whisper_model
 
 def transcribe_audio(audio_file):
-    segments, info = whisper_model.transcribe(
+    model = get_whisper_model()
+    segments, info = model.transcribe(
         audio_file,
         beam_size=5
     )

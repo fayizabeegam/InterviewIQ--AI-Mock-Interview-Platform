@@ -1,4 +1,61 @@
+
+# =========================
+# PYTHON / DJANGO
+# =========================
+
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+Backend/venv/
+Backend/.venv/
+venv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+Backend/.env
+
+# Django
+*.sqlite3
+staticfiles/
+
+# Uploaded media
+Backend/media/
+
+# =========================
+# REACT / NODE
+# =========================
+
+node_modules/
+Frontend/node_modules/
+Frontend/dist/
+dist/
+dist-ssr/
+
+# =========================
+# IDE / SYSTEM
+# =========================
+
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =========================
+# TESTING
+# =========================
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
 # Logs
+# =========================
+
 logs
 *.log
 npm-debug.log*
@@ -12,7 +69,10 @@ dist
 dist-ssr
 *.local
 
+# =========================
 # Editor directories and files
+# =========================
+
 .vscode/*
 !.vscode/extensions.json
 .idea
