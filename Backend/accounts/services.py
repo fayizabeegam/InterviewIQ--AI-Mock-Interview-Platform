@@ -135,34 +135,41 @@ def send_password_reset_email(user):
 def send_change_password_otp(user):
     otp = create_otp(user, "PASSWORD_RESET")
 
-    subject = "InterviewIQ Password Change OTP"
+    # Locate React Email HTML template
+    template_path = (
+        Path(settings.BASE_DIR)
+        / "accounts"
+        / "templates"
+        / "emails"
+        / "change_password_otp_email.html"
+    )
 
-    html_content = f"""
-    <html>
-        <body>
-            <h2>Change Password</h2>
+    # Read generated HTML
+    html_content = template_path.read_text(encoding="utf-8")
 
-            <p>Hello {user.first_name},</p>
+    # Replace React Email placeholders
+    html_content = html_content.replace(
+        "{{NAME}}",
+        user.first_name or "User"
+    )
 
-            <p>Your OTP is:</p>
+    html_content = html_content.replace(
+        "{{OTP}}",
+        str(otp.otp)
+    )
 
-            <h1>{otp.otp}</h1>
-
-            <p>This OTP is valid for 10 minutes.</p>
-
-            <p>If you didn't request this, please ignore this email.</p>
-        </body>
-    </html>
-    """
-
+    # Create email
     email = EmailMultiAlternatives(
-        subject=subject,
-        body="Your password change OTP.",
+        subject="InterviewIQ Password Change OTP",
+        body="Your password change OTP is valid for 10 minutes.",
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[user.email],
     )
 
+    # Attach React Email HTML
     email.attach_alternative(html_content, "text/html")
+
+    # Send email
     email.send(fail_silently=False)
 
     return otp

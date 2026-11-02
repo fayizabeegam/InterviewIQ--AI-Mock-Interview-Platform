@@ -164,3 +164,59 @@ code {
     animation: none;
   }
 }
+
+
+@keyframes analysis-up {
+  0% {
+    opacity: 0;
+    transform: translateY(45px);
+  }
+
+  18% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+
+  35% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+
+  82% {
+    opacity: 0.7;
+    transform: translateY(-30px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-65px);
+  }
+}
+
+
+.animate-analysis-up {
+  animation: analysis-up 1.2s ease-in-out forwards;
+}
+
+
+@keyframes completion-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(15px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+.animate-completion-in {
+  animation: completion-in 0.5s ease-out forwards;
+}

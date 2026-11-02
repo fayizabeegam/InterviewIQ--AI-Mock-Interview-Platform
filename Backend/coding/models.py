@@ -79,3 +79,22 @@ class CodingSubmission(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.question.title}"
+
+
+
+
+class CodingTestCase(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    question = models.ForeignKey(CodingQuestion,on_delete=models.CASCADE,
+                                 related_name="test_cases")
+    input_data = models.TextField()
+    expected_output = models.TextField()
+    is_sample = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"Test case for {self.question.title} ({self.order})"

@@ -25,6 +25,16 @@ urlpatterns = [
     path("api/auth/", include("accounts.urls")),
 
     path("api/resumes/", include("resumes.urls")),
+
+    path("api/jobs/", include("jobs.urls")),
+
+    path("api/interviews/", include("interviews.urls")),
+
+    path("api/coding/", include("coding.urls")),
+
+    path("api/admin/", include("admin_panel.urls")),
+
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

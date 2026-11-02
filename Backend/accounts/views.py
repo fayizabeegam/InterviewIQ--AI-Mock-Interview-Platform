@@ -137,6 +137,8 @@ class LoginView(GenericAPIView):
                     "last_name": user.last_name,
                     "email": user.email,
                     "is_email_verified": user.is_email_verified,
+                    "is_superuser": user.is_superuser,
+                    "is_staff": user.is_staff,
                 }
             }
 

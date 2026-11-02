@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRobot } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 import {
   ArrowRight,
@@ -8,14 +9,22 @@ import {
   X,
   Bell,
   ChevronDown,
+  UserRound,
+  LockKeyhole,
+  LogOut,
 } from "lucide-react";
+
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isCodingPractice = location.pathname === "/coding-practice";
+
 
   // =====================================================
   // AUTH
   // =====================================================
+
   const token = localStorage.getItem("access_token");
 
   const user = JSON.parse(
@@ -29,6 +38,9 @@ function Navbar() {
     user?.username ||
     "User";
 
+  const email =
+    user?.email || "";
+
   const initial =
     displayName.charAt(0).toUpperCase();
 
@@ -36,14 +48,23 @@ function Navbar() {
   // =====================================================
   // STATE
   // =====================================================
-  const [scrolled, setScrolled] = useState(false);
+
+  const [scrolled, setScrolled] =
+    useState(false);
+
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
+
+  const [profileOpen, setProfileOpen] =
+    useState(false);
+
+  const profileRef = useRef(null);
 
 
   // =====================================================
   // NAVBAR SCROLL EFFECT
   // =====================================================
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -66,12 +87,41 @@ function Navbar() {
 
 
   // =====================================================
+  // CLOSE PROFILE DROPDOWN ON OUTSIDE CLICK
+  // =====================================================
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target)
+      ) {
+        setProfileOpen(false);
+      }
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
+
+  // =====================================================
   // SCROLL TO HOME SECTION
   // =====================================================
+
   const scrollToSection = (id) => {
     setMobileMenuOpen(false);
+    setProfileOpen(false);
 
-    // If already on home page
     if (window.location.pathname === "/") {
       document
         .getElementById(id)
@@ -83,17 +133,34 @@ function Navbar() {
       return;
     }
 
-    // If user is on another page
     navigate(`/#${id}`);
   };
 
 
   // =====================================================
-  // NAVIGATE AND CLOSE MOBILE MENU
+  // NAVIGATE AND CLOSE MENUS
   // =====================================================
+
   const handleNavigate = (path) => {
     setMobileMenuOpen(false);
+    setProfileOpen(false);
     navigate(path);
+  };
+
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
+  const handleLogout = () => {
+    setProfileOpen(false);
+    setMobileMenuOpen(false);
+
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user");
+
+    navigate("/login");
   };
 
 
@@ -102,7 +169,9 @@ function Navbar() {
 
       <div
         className={`mx-auto max-w-7xl transition-all duration-300 ${
-          scrolled
+          isCodingPractice
+          ? "rounded-2xl border border-slate-200/80 bg-white/85 shadow-lg shadow-slate-200/40 backdrop-blur-xl"
+          :scrolled
             ? "rounded-2xl border border-slate-200/80 bg-white/85 shadow-lg shadow-slate-200/40 backdrop-blur-xl"
             : "border border-transparent bg-white/60 backdrop-blur-md"
         }`}
@@ -110,9 +179,11 @@ function Navbar() {
 
         <div className="flex h-16 items-center justify-between px-4 sm:px-6">
 
+
           {/* =================================================
               LOGO
           ================================================= */}
+
           <button
             type="button"
             onClick={() => {
@@ -128,7 +199,6 @@ function Navbar() {
 
             <div className="relative">
 
-              {/* Logo Glow */}
               <div className="absolute inset-0 rounded-xl bg-blue-500 opacity-0 blur-lg transition group-hover:opacity-30" />
 
               <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-md shadow-blue-200">
@@ -156,11 +226,11 @@ function Navbar() {
           {/* =================================================
               DESKTOP NAVIGATION
           ================================================= */}
+
           <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
 
             {!isLoggedIn ? (
               <>
-                {/* Visitor Navigation */}
 
                 <NavItem
                   onClick={() =>
@@ -170,6 +240,7 @@ function Navbar() {
                   Features
                 </NavItem>
 
+
                 <NavItem
                   onClick={() =>
                     scrollToSection("how-it-works")
@@ -177,6 +248,7 @@ function Navbar() {
                 >
                   How It Works
                 </NavItem>
+
 
                 <NavItem
                   onClick={() =>
@@ -186,6 +258,7 @@ function Navbar() {
                   About
                 </NavItem>
 
+
                 <NavItem
                   onClick={() =>
                     scrollToSection("testimonials")
@@ -193,16 +266,19 @@ function Navbar() {
                 >
                   Testimonials
                 </NavItem>
+
               </>
             ) : (
               <>
-                {/* Logged In Navigation */}
 
                 <NavItem
-                  onClick={() => navigate("/")}
+                  onClick={() =>
+                    navigate("/")
+                  }
                 >
                   Home
                 </NavItem>
+
 
                 <NavItem
                   onClick={() =>
@@ -212,6 +288,16 @@ function Navbar() {
                   Resume Analyzer
                 </NavItem>
 
+
+                <NavItem
+                  onClick={() =>
+                    navigate("/job-matcher")
+                  }
+                >
+                  Job Matcher
+                </NavItem>
+
+
                 <NavItem
                   onClick={() =>
                     navigate("/ai-interview")
@@ -220,21 +306,24 @@ function Navbar() {
                   AI Interview
                 </NavItem>
 
+
                 <NavItem
                   onClick={() =>
-                    navigate("/coding")
+                    navigate("/coding-practice")
                   }
                 >
                   Coding Practice
                 </NavItem>
 
+
                 <NavItem
                   onClick={() =>
-                    navigate("/reports")
+                    navigate("/roadmap")
                   }
                 >
-                  Reports
+                  Roadmap
                 </NavItem>
+
               </>
             )}
 
@@ -244,15 +333,14 @@ function Navbar() {
           {/* =================================================
               RIGHT SIDE
           ================================================= */}
+
           <div className="flex items-center gap-2">
 
             {!isLoggedIn ? (
               <>
-                {/* ===============================
-                    LOGGED OUT
-                =============================== */}
 
                 {/* Login */}
+
                 <button
                   type="button"
                   onClick={() =>
@@ -265,6 +353,7 @@ function Navbar() {
 
 
                 {/* Get Started */}
+
                 <button
                   type="button"
                   onClick={() =>
@@ -278,54 +367,172 @@ function Navbar() {
                     size={15}
                     className="transition-transform duration-300 group-hover:translate-x-1"
                   />
+
                 </button>
 
               </>
             ) : (
               <>
-                {/* ===============================
-                    LOGGED IN
-                =============================== */}
 
                 {/* Notification */}
+
                 <button
                   type="button"
                   aria-label="Notifications"
                   className="relative hidden h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 sm:flex"
                 >
+
                   <Bell size={19} />
 
                   <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
+
                 </button>
 
 
-                {/* Profile */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    navigate("/profile")
-                  }
-                  className="hidden items-center gap-2 rounded-xl p-1.5 pr-2 transition hover:bg-slate-100 sm:flex"
+                {/* =================================================
+                    PROFILE DROPDOWN
+                ================================================= */}
+
+                <div
+                  ref={profileRef}
+                  className="relative"
                 >
 
-                  {/* User Initial */}
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-bold text-white">
-                    {initial}
-                  </div>
+                  {/* User Button */}
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setProfileOpen(
+                        (previous) => !previous
+                      )
+                    }
+                    aria-expanded={profileOpen}
+                    className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition hover:bg-slate-50"
+                  >
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-semibold text-white shadow-sm">
+                      {initial}
+                    </div>
 
 
-                  {/* Name */}
-                  <span className="hidden max-w-24 truncate text-sm font-semibold text-slate-700 xl:block">
-                    {displayName}
-                  </span>
+                    <span className="hidden max-w-[110px] truncate text-sm font-medium text-slate-700 sm:block">
+                      {displayName}
+                    </span>
 
 
-                  <ChevronDown
-                    size={15}
-                    className="text-slate-400"
-                  />
+                    <ChevronDown
+                      className={`hidden h-4 w-4 text-slate-400 transition-transform duration-200 sm:block ${
+                        profileOpen
+                          ? "rotate-180"
+                          : ""
+                      }`}
+                    />
 
-                </button>
+                  </button>
+
+
+                  {/* Dropdown */}
+
+                  {profileOpen && (
+
+                    <div className="absolute right-0 top-full z-[100] mt-2 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+
+
+                      {/* User Information */}
+
+                      <div className="border-b border-slate-100 px-4 py-4">
+
+                        <div className="flex items-center gap-3">
+
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-semibold text-white">
+                            {initial}
+                          </div>
+
+
+                          <div className="min-w-0">
+
+                            <p className="truncate text-sm font-semibold text-slate-800">
+                              {displayName}
+                            </p>
+
+                            {email && (
+                              <p className="mt-0.5 truncate text-xs text-slate-400">
+                                {email}
+                              </p>
+                            )}
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+
+                      {/* Profile Actions */}
+
+                      <div className="p-2">
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleNavigate(
+                              "/user-profile"
+                            )
+                          }
+                          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
+                        >
+
+                          <UserRound className="h-4 w-4" />
+
+                          My Profile
+
+                        </button>
+
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleNavigate(
+                              "/change-password"
+                            )
+                          }
+                          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
+                        >
+
+                          <LockKeyhole className="h-4 w-4" />
+
+                          Change Password
+
+                        </button>
+
+                      </div>
+
+
+                      {/* Logout */}
+
+                      <div className="border-t border-slate-100 p-2">
+
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-500 transition hover:bg-red-50"
+                        >
+
+                          <LogOut className="h-4 w-4" />
+
+                          Logout
+
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  )}
+
+                </div>
+
               </>
             )}
 
@@ -333,11 +540,12 @@ function Navbar() {
             {/* =================================================
                 MOBILE MENU BUTTON
             ================================================= */}
+
             <button
               type="button"
               onClick={() =>
                 setMobileMenuOpen(
-                  (prev) => !prev
+                  (previous) => !previous
                 )
               }
               aria-label="Toggle navigation menu"
@@ -360,10 +568,11 @@ function Navbar() {
         {/* =================================================
             MOBILE MENU
         ================================================= */}
+
         <div
           className={`overflow-hidden transition-all duration-300 lg:hidden ${
             mobileMenuOpen
-              ? "max-h-[650px] opacity-100"
+              ? "max-h-[750px] opacity-100"
               : "max-h-0 opacity-0"
           }`}
         >
@@ -371,14 +580,12 @@ function Navbar() {
           <div className="border-t border-slate-100 px-4 pb-4 pt-3">
 
 
-            {/* =================================================
-                MOBILE NAVIGATION
-            ================================================= */}
+            {/* Mobile Navigation */}
+
             <div className="space-y-1">
 
               {!isLoggedIn ? (
                 <>
-                  {/* Visitor Mobile Navigation */}
 
                   <MobileNavItem
                     onClick={() =>
@@ -422,7 +629,6 @@ function Navbar() {
                 </>
               ) : (
                 <>
-                  {/* Logged In Mobile Navigation */}
 
                   <MobileNavItem
                     onClick={() =>
@@ -444,6 +650,19 @@ function Navbar() {
                   </MobileNavItem>
 
 
+                  {/* Added Job Matcher to mobile */}
+
+                  <MobileNavItem
+                    onClick={() =>
+                      handleNavigate(
+                        "/job-matcher"
+                      )
+                    }
+                  >
+                    Job Matcher
+                  </MobileNavItem>
+
+
                   <MobileNavItem
                     onClick={() =>
                       handleNavigate(
@@ -457,7 +676,9 @@ function Navbar() {
 
                   <MobileNavItem
                     onClick={() =>
-                      handleNavigate("/coding")
+                      handleNavigate(
+                        "/coding"
+                      )
                     }
                   >
                     Coding Practice
@@ -466,7 +687,9 @@ function Navbar() {
 
                   <MobileNavItem
                     onClick={() =>
-                      handleNavigate("/reports")
+                      handleNavigate(
+                        "/reports"
+                      )
                     }
                   >
                     Reports
@@ -483,9 +706,6 @@ function Navbar() {
             ================================================= */}
 
             {!isLoggedIn ? (
-              /* ===============================
-                 LOGGED OUT MOBILE
-              =============================== */
 
               <div className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4">
 
@@ -510,23 +730,19 @@ function Navbar() {
                   Get Started
 
                   <ArrowRight size={15} />
+
                 </button>
 
               </div>
+
             ) : (
-              /* ===============================
-                 LOGGED IN MOBILE PROFILE
-              =============================== */
 
-              <div className="mt-4 border-t border-slate-100 pt-4">
+              <div className="mt-4 space-y-2 border-t border-slate-100 pt-4">
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleNavigate("/profile")
-                  }
-                  className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition hover:bg-slate-50"
-                >
+
+                {/* Mobile User */}
+
+                <div className="flex items-center gap-3 px-3 py-2">
 
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-bold text-white">
                     {initial}
@@ -539,21 +755,69 @@ function Navbar() {
                       {displayName}
                     </p>
 
-                    <p className="text-xs text-slate-400">
-                      View profile
-                    </p>
+                    {email && (
+                      <p className="truncate text-xs text-slate-400">
+                        {email}
+                      </p>
+                    )}
 
                   </div>
 
+                </div>
 
-                  <ChevronDown
-                    size={16}
-                    className="-rotate-90 text-slate-400"
-                  />
+
+                {/* My Profile */}
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleNavigate("/user-profile")
+                  }
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
+                >
+
+                  <UserRound className="h-4 w-4" />
+
+                  My Profile
+
+                </button>
+
+
+                {/* Change Password */}
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleNavigate(
+                      "/change-password"
+                    )
+                  }
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
+                >
+
+                  <LockKeyhole className="h-4 w-4" />
+
+                  Change Password
+
+                </button>
+
+
+                {/* Logout */}
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-red-500 transition hover:bg-red-50"
+                >
+
+                  <LogOut className="h-4 w-4" />
+
+                  Logout
 
                 </button>
 
               </div>
+
             )}
 
           </div>
@@ -567,9 +831,9 @@ function Navbar() {
 }
 
 
-/* =====================================================
-   DESKTOP NAV ITEM
-===================================================== */
+// =====================================================
+// DESKTOP NAV ITEM
+// =====================================================
 
 function NavItem({
   children,
@@ -581,17 +845,19 @@ function NavItem({
       onClick={onClick}
       className="group relative rounded-lg px-3.5 py-2 text-[13px] font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-950"
     >
+
       {children}
 
       <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-blue-600 transition-all duration-300 group-hover:w-4" />
+
     </button>
   );
 }
 
 
-/* =====================================================
-   MOBILE NAV ITEM
-===================================================== */
+// =====================================================
+// MOBILE NAV ITEM
+// =====================================================
 
 function MobileNavItem({
   children,
@@ -603,14 +869,17 @@ function MobileNavItem({
       onClick={onClick}
       className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-blue-600"
     >
+
       {children}
 
       <ArrowRight
         size={14}
         className="text-slate-300"
       />
+
     </button>
   );
 }
+
 
 export default Navbar;

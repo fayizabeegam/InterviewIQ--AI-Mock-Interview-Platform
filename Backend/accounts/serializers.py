@@ -108,7 +108,7 @@ class LoginSerializer(serializers.Serializer):
                 "Account is disabled."
             )
 
-        if not user.is_email_verified:
+        if not user.is_email_verified and not user.is_superuser:
             raise serializers.ValidationError(
                 "Please verify your email before logging in."
             )
@@ -195,6 +195,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "github_url",
             "is_email_verified",
             "created_at",
+
         )
         read_only_fields = (
             "id",

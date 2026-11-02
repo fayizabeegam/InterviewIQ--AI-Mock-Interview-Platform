@@ -5,6 +5,7 @@ import path from "path";
 
 import VerificationEmail from "../src/email/templates/VerificationEmail.jsx";
 import PasswordResetEmail from "../src/email/templates/PasswordResetEmail.jsx";
+import ChangePasswordOTPEmail from "../src/email/templates/ChangePasswordOTPEmail.jsx";
 
 const outputDir = path.resolve(
   "D:/Fayiza/Django/InterviewIQ/Backend/accounts/templates/emails"
@@ -39,6 +40,19 @@ async function renderEmails() {
   fs.writeFileSync(
     path.join(outputDir, "password_reset_email.html"),
     resetHtml
+  );
+
+  // change password otp email
+  const changePasswordHtml = await render(
+    React.createElement(ChangePasswordOTPEmail, {
+      name: "{{NAME}}",
+      otp: "{{OTP}}",
+    })
+  );
+
+  fs.writeFileSync(
+    path.join(outputDir, "change_password_otp_email.html"),
+    changePasswordHtml
   );
 
   console.log("Email templates rendered successfully.");

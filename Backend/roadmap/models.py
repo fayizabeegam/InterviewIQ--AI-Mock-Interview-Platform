@@ -22,6 +22,8 @@ class LearningRoadmap(models.Model):
     description = models.TextField(blank=True)
     estimated_duration = models.CharField(max_length=100)
     status = models.CharField(max_length=20,choices=STATUS_CHOICES)
+    target_role = models.CharField(max_length=150, default="Python Developer")
+    focus_areas = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,6 +56,10 @@ class RoadmapTask(models.Model):
     estimated_hours = models.PositiveIntegerField()
     due_date = models.DateField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True,blank=True)
+    week_number = models.PositiveSmallIntegerField(default=1)
+    day_number = models.PositiveSmallIntegerField(default=1)
+    resource_name = models.CharField(max_length=255, blank=True)
+    resource_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

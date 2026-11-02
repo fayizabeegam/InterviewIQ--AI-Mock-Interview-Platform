@@ -120,6 +120,7 @@ const ResumeAnalyzer = () => {
             }
 
             const response = await getResumes(token);
+            // console.log("RESUME LIST RESPONSE:", response.data);
 
             const resumeList =
                 response.data.data ??

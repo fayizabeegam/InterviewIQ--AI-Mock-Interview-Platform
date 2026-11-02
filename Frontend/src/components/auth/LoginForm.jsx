@@ -61,6 +61,11 @@ function LoginForm() {
 
       const data = response.data.data;
 
+      console.log("Login response:", response.data);
+      console.log("Access token received:", !!data?.access);
+      console.log("Refresh token received:", !!data?.refresh);
+      console.log("User received:", !!data?.user);
+
       localStorage.setItem(
         "access_token",
         data.access
@@ -76,7 +81,11 @@ function LoginForm() {
         JSON.stringify(data.user)
       );
 
-      navigate("/dashboard");
+      if (data.user?.is_superuser) {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
 
     } catch (error) {
 

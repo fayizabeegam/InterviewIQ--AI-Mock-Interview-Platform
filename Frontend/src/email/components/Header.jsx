@@ -8,7 +8,7 @@ export default function EmailHeader({ title, subtitle }) {
         style={{
           margin: 0,
           color: "#2563EB",
-          fontSize: "32px",
+          fontSize: "24px",
           textAlign: "center",
           fontWeight: "700",
         }}

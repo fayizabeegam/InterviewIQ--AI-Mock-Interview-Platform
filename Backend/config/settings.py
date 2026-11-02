@@ -47,16 +47,15 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     "accounts",
-    "dashboard",
     "resumes",
     "jobs",
-    "interviews",
+    "interviews.apps.InterviewsConfig",
     "coding",
-    "feedback",
     "roadmap",
     "notifications",
-    "analytics",
-    "common",
+    "admin_panel",
+    
+    
 ]
 
 MIDDLEWARE = [

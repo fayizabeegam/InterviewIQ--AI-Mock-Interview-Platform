@@ -1,8 +1,8 @@
 import Navbar from "./Navbar";
 
-function UserLayout({ children }) {
+function UserLayout({ children, backgroundClass = "bg-slate-50"  }) {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className={`min-h-screen ${backgroundClass}`}>
       <Navbar />
 
       <main className="w-full pt-24 sm:pt-28">
