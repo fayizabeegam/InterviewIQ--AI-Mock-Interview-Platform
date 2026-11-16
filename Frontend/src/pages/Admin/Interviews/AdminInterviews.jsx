@@ -10,7 +10,10 @@ import {
   Users,
   Video,
   AlertCircle,
+  Home,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Eye } from "lucide-react";
 
 import AdminDashboardLayout from "../../../components/layout/AdminDashboardLayout";
 import { getAdminInterviews } from "../../../services/adminService";
@@ -79,6 +82,7 @@ function statusStyle(value) {
 }
 
 export default function AdminInterviews() {
+  const navigate = useNavigate();
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -185,14 +189,13 @@ export default function AdminInterviews() {
       adminName="Admin"
     >
       <main className="mx-auto max-w-[1800px] space-y-6 p-4 sm:p-6 xl:p-7">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+          <Home size={16} /><span>/</span><span>Interviews</span><span>/</span>
+          <span className="font-bold text-slate-950">Interview Management</span>
+        </div>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">
-              Interview Management
-            </h2>
-            <p className="mt-2 text-slate-500">
-              Monitor interview sessions, candidates, and completion status.
-            </p>
+            
           </div>
 
           <button
@@ -341,7 +344,7 @@ export default function AdminInterviews() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1000px] text-left text-sm">
+              <table className="w-full min-w-[1100px] text-left text-sm">
                 <thead>
                   <tr className="bg-slate-50 text-slate-600">
                     <th className="px-5 py-4 font-semibold">Candidate</th>
@@ -350,6 +353,7 @@ export default function AdminInterviews() {
                     <th className="px-5 py-4 font-semibold">Questions</th>
                     <th className="px-5 py-4 font-semibold">Created Date</th>
                     <th className="px-5 py-4 font-semibold">Status</th>
+                    <th className="px-5 py-4 font-semibold">Action</th>
                   </tr>
                 </thead>
 
@@ -410,6 +414,19 @@ export default function AdminInterviews() {
                         >
                           {formatStatus(interview.status)}
                         </span>
+                      </td>
+
+                      <td className="px-5 py-4">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            navigate(`/admin/interviews/${interview.id}`)
+                          }
+                          className="inline-flex items-center gap-2 rounded-lg border border-blue-200 px-3 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
+                        >
+                          <Eye size={16} />
+                          View
+                        </button>
                       </td>
                     </tr>
                   ))}

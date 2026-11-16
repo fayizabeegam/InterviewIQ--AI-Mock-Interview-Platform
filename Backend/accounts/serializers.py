@@ -17,6 +17,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "mobile",
             "password",
             "confirm_password",
         )
@@ -47,6 +48,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
             email=validated_data["email"],
+            mobile=validated_data.get("mobile", ""),
             password=validated_data["password"],
             is_active=True,
             is_email_verified=False,

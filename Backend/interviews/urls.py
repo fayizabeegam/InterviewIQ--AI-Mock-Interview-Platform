@@ -12,6 +12,10 @@ urlpatterns = [
      path("<uuid:pk>/",InterviewDetailView.as_view(),name="interview-detail"),
      path("<uuid:id>/questions/",SaveInterviewQuestionsView.as_view(),
           name="save-interview-questions"),
+     
+     path("<uuid:id>/questions/<uuid:question_id>/answer/",SubmitInterviewAnswerView.as_view(),
+          name="submit-interview-answer"),
+
      path("<uuid:id>/transcribe/",TranscribeInterviewAudioView.as_view(),
          name="interview-transcribe"),
 ]

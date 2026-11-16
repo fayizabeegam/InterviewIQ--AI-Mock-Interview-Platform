@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "roadmap",
     "notifications",
     "admin_panel",
+    "platform_settings.apps.PlatformSettingsConfig",
     
     
 ]

@@ -41,7 +41,6 @@ class CodingSubmissionSerializer(serializers.ModelSerializer):
         model = CodingSubmission
         fields = [
             "id",
-            "interview",
             "question",
             "question_title",
             "user",
@@ -77,3 +76,23 @@ class CodingSubmissionSerializer(serializers.ModelSerializer):
                 "Source code cannot be empty."
             )
         return value
+
+
+
+class CodingTestCaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CodingTestCase
+        fields = [
+            "id",
+            "question",
+            "input_data",
+            "expected_output",
+            "is_sample",
+            "order",
+            "created_at",
+        ]
+        read_only_fields = [
+            "id",
+            "question",
+            "created_at",
+        ]

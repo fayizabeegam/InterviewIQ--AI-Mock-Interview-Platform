@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Lock, Mail, ArrowLeft  } from "lucide-react";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
@@ -10,6 +10,13 @@ import {
 
 function ChangePassword() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAdmin = location.state?.from === "admin";   
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+ 
+
   const token = localStorage.getItem("access_token");
 
   const [step, setStep] = useState(1);
@@ -142,11 +149,13 @@ function ChangePassword() {
         {/* Back to Home */}
         <button
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate(isAdmin ? "/admin/dashboard" : "/")
+          }
           className="mb-10 flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600"
         >
           <ArrowLeft size={18} />
-          Back to Home
+          {isAdmin ? "Back to Admin Dashboard" : "Back to Home"}
         </button>
 
         {/* Heading */}

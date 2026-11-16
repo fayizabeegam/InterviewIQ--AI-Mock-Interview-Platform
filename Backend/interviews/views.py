@@ -197,6 +197,82 @@ class SaveInterviewQuestionsView(generics.GenericAPIView):
         )
 
 
+
+
+class SubmitInterviewAnswerView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id, question_id):
+
+        # 1. Verify interview belongs to the logged-in candidate
+        try:
+            interview = Interview.objects.get(
+                id=id,
+                user=request.user
+            )
+        except Interview.DoesNotExist:
+            return Response(
+                {"detail": "Interview not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # 2. Check interview status
+        if interview.status != "IN_PROGRESS":
+            return Response(
+                {"detail": "Interview is not in progress."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 3. Verify question belongs to this interview
+        try:
+            question = InterviewQuestion.objects.get(
+                id=question_id,
+                interview=interview
+            )
+        except InterviewQuestion.DoesNotExist:
+            return Response(
+                {"detail": "Question not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # 4. Get candidate answer
+        answer_text = request.data.get("answer_text", "")
+
+        if not isinstance(answer_text, str) or not answer_text.strip():
+            return Response(
+                {"detail": "Answer text is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 5. Save answer
+        answer, created = InterviewAnswer.objects.update_or_create(
+            question=question,
+            defaults={
+                "answer_text": answer_text.strip()
+            }
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": "Answer saved successfully.",
+                "data": {
+                    "id": str(answer.id),
+                    "question_id": str(question.id),
+                    "answer_text": answer.answer_text,
+                    "submitted_at": answer.submitted_at,
+                }
+            },
+            status=(
+                status.HTTP_201_CREATED
+                if created
+                else status.HTTP_200_OK
+            )
+        )
+
+
+
+
 class TranscribeInterviewAudioView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 

@@ -3,7 +3,6 @@ import uuid
 from django.db import models
 from resumes.models import Skill
 from django.conf import settings
-from interviews.models import Interview
 
 
 
@@ -54,8 +53,7 @@ class CodingSubmission(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    interview = models.ForeignKey(Interview,on_delete=models.CASCADE,
-                    related_name="coding_submissions")
+    
     question = models.ForeignKey(CodingQuestion,on_delete=models.CASCADE,
                     related_name="submissions")
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

@@ -61,3 +61,23 @@ export const completeInterview = (interviewId, token) => {
     }
   );
 };
+
+
+export const submitInterviewAnswer = (
+  interviewId,
+  questionId,
+  answerText,
+  token
+) => {
+  return api.post(
+    `interviews/${interviewId}/questions/${questionId}/answer/`,
+    {
+      answer_text: answerText,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};

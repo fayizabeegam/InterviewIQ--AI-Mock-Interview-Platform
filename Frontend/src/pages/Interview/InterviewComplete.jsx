@@ -230,7 +230,14 @@ const InterviewComplete = () => {
       }
 
       try {
-        await completeInterview(interviewId);
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+          throw new Error("Authentication required. Please log in again.");
+        }
+
+        await completeInterview(interviewId, token);
+
         setCompletionLoading(false);
       } catch (error) {
         console.error(
@@ -240,6 +247,7 @@ const InterviewComplete = () => {
 
         setCompletionError(
           error.response?.data?.detail ||
+          error.message ||
           "Unable to complete the interview. Please try again."
         );
 
@@ -249,7 +257,6 @@ const InterviewComplete = () => {
 
     markInterviewComplete();
   }, [interviewId]);
-
 
   if (completionLoading) {
     return (

@@ -34,6 +34,9 @@ urlpatterns = [
 
     path("api/admin/", include("admin_panel.urls")),
 
+    path("api/admin/", include("platform_settings.admin_urls")),
+    path("api/", include("platform_settings.user_urls")),
+
 
 ]
 if settings.DEBUG:

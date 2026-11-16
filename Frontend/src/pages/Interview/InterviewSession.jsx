@@ -19,7 +19,7 @@ import Container from "../../components/common/Container";
 
 import robotImage from "../../assets/images/interviewRobo.png";
 import api from "../../services/api";
-import { getInterviewDetail } from "../../services/interviewService";
+import { getInterviewDetail, submitInterviewAnswer } from "../../services/interviewService";
 import { evaluateInterviewAnswer } from "../../services/ai/answerEvaluator";
 
 
@@ -503,12 +503,42 @@ const InterviewSession = () => {
 
       console.log("Answer evaluation:", result);
 
+      // Get the current database question ID.
+      const currentQuestionData = questions[currentQuestion - 1];
+
+      if (!currentQuestionData?.id) {
+        throw new Error("Question ID not found.");
+      }
+
+      // Include follow-up answers with the main answer.
+      const previousAnswer =
+        answers[currentQuestion]?.answer || "";
+
+      const combinedAnswer =
+        conversationStage === "followup" && previousAnswer
+          ? `${previousAnswer}\n\nFollow-up: ${evaluationQuestion}\nAnswer: ${currentAnswer}`
+          : currentAnswer;
+
+      // Save the answer to the backend.
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        throw new Error("Authentication required.");
+      }
+
+      await submitInterviewAnswer(
+        interviewId,
+        currentQuestionData.id,
+        combinedAnswer,
+        token
+      );
+
+      // Preserve the answer and its evaluation in React state.
       const updatedAnswer = {
-        answer: currentAnswer,
+        answer: combinedAnswer,
         evaluation: result,
       };
 
-      // Preserve the answer and its evaluation.
       const updatedAnswers = {
         ...answers,
         [currentQuestion]: {
@@ -518,7 +548,7 @@ const InterviewSession = () => {
       };
 
       setAnswers(updatedAnswers);
-
+      
       const response =
         result.interviewer_response?.trim() || "";
 
