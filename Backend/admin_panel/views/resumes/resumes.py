@@ -517,7 +517,7 @@ class AdminResumeDetailAPIView(APIView):
             "email": user.email,
             "date_joined": user.date_joined,
             "is_active": user.is_active,
-            "is_verified": getattr(user, "is_verified", None),
+            "is_email_verified": getattr(user, "is_email_verified", None),
         }
 
         # --------------------------------

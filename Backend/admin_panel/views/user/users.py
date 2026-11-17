@@ -253,7 +253,6 @@ class AdminUserDetailView(APIView):
         submissions = (
             CodingSubmission.objects
             .filter(user=user)
-            .select_related("question", "interview")
             .order_by("-submitted_at")
         )
 
@@ -291,7 +290,6 @@ class AdminUserDetailView(APIView):
                     if submission.memory_used is not None
                     else None
                 ),
-                "interview_id": str(submission.interview_id),
                 "submitted_at": submission.submitted_at,
             })
 

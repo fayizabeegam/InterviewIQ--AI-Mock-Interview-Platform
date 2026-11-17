@@ -11,6 +11,8 @@ import {
   Video,
   AlertCircle,
   Home,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
@@ -83,12 +85,17 @@ function statusStyle(value) {
 
 export default function AdminInterviews() {
   const navigate = useNavigate();
+
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
+
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const pageSize = 8;
 
   const loadInterviews = useCallback(async () => {
     try {
@@ -181,6 +188,22 @@ export default function AdminInterviews() {
     [interviews]
   );
 
+  // Pagination logic
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredInterviews.length / pageSize)
+  );
+
+  const visibleInterviews = filteredInterviews.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
+
+  const goToPage = (nextPage) =>
+    setPage(
+      Math.min(totalPages, Math.max(1, nextPage))
+    );
+
   return (
     <AdminDashboardLayout
       activePage="Interviews"
@@ -193,10 +216,9 @@ export default function AdminInterviews() {
           <Home size={16} /><span>/</span><span>Interviews</span><span>/</span>
           <span className="font-bold text-slate-950">Interview Management</span>
         </div>
+
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            
-          </div>
+          <div></div>
 
           <button
             type="button"
@@ -276,7 +298,10 @@ export default function AdminInterviews() {
                 />
                 <input
                   value={search}
-                  onChange={(event) => setSearch(event.target.value)}
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    setPage(1);
+                  }}
                   placeholder="Search candidate or type..."
                   aria-label="Search interviews"
                   className="h-11 w-full rounded-xl border border-slate-200 pl-10 pr-4 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:w-64"
@@ -285,7 +310,10 @@ export default function AdminInterviews() {
 
               <select
                 value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
+                onChange={(event) => {
+                  setStatusFilter(event.target.value);
+                  setPage(1);
+                }}
                 aria-label="Filter interviews by status"
                 className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-blue-400"
               >
@@ -299,7 +327,10 @@ export default function AdminInterviews() {
 
               <select
                 value={typeFilter}
-                onChange={(event) => setTypeFilter(event.target.value)}
+                onChange={(event) => {
+                  setTypeFilter(event.target.value);
+                  setPage(1);
+                }}
                 aria-label="Filter interviews by type"
                 className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-blue-400"
               >
@@ -358,7 +389,7 @@ export default function AdminInterviews() {
                 </thead>
 
                 <tbody>
-                  {filteredInterviews.map((interview) => (
+                  {visibleInterviews.map((interview) => (
                     <tr
                       key={interview.id}
                       className="border-t border-slate-100 transition hover:bg-slate-50/70"
@@ -435,8 +466,73 @@ export default function AdminInterviews() {
             </div>
           )}
 
-          <div className="border-t border-slate-100 bg-slate-50/70 px-5 py-3 text-xs text-slate-500">
-            Interview records are read-only on this page.
+          {/* Pagination */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-5 py-3">
+
+            <p className="text-sm text-slate-800">
+              Showing{" "}
+              {filteredInterviews.length === 0
+                ? 0
+                : (page - 1) * pageSize + 1}
+              –
+              {Math.min(page * pageSize, filteredInterviews.length)}
+              {" "}of {filteredInterviews.length} interviews
+            </p>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => goToPage(page - 1)}
+                disabled={page === 1}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              {Array.from(
+                { length: Math.min(totalPages, 5) },
+                (_, index) => index + 1
+              ).map((number) => (
+                <button
+                  key={number}
+                  type="button"
+                  onClick={() => goToPage(number)}
+                  className={`h-10 min-w-10 rounded-lg border px-3 text-sm font-semibold ${
+                    page === number
+                      ? "border-blue-600 bg-blue-600 text-white"
+                      : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+
+              {totalPages > 5 && (
+                <>
+                  <span className="px-1 text-slate-600">...</span>
+                  <button
+                    type="button"
+                    onClick={() => goToPage(totalPages)}
+                    className={`h-10 min-w-10 rounded-lg border px-3 text-sm font-semibold ${
+                      page === totalPages
+                        ? "border-blue-600 bg-blue-600 text-white"
+                        : "border-slate-200 bg-white text-slate-900"
+                    }`}
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
+
+              <button
+                type="button"
+                onClick={() => goToPage(page + 1)}
+                disabled={page === totalPages}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
           </div>
         </section>
       </main>

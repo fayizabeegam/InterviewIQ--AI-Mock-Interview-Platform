@@ -15,6 +15,7 @@ import {
   RefreshCw,
   CalendarDays,
   ChevronLeft,
+  ChevronRight as ChevronRightIcon,
   ChevronsLeft,
   ChevronsRight,
   X,
@@ -191,7 +192,7 @@ export default function AdminAllResumes() {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(8);
 
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -333,6 +334,11 @@ export default function AdminAllResumes() {
   const allVisibleSelected =
     visibleIds.length > 0 &&
     visibleIds.every((id) => selectedIds.includes(id));
+
+  const goToPage = (nextPage) =>
+    setPage(
+      Math.min(totalPages, Math.max(1, nextPage))
+    );
 
   const toggleSelectAll = () => {
     if (allVisibleSelected) {
@@ -882,80 +888,80 @@ export default function AdminAllResumes() {
           </div>
 
           {/* Pagination */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-4 border-t border-gray-100 px-5 py-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 px-5 py-3">
 
-            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-700">
-              <span>Rows per page</span>
-
-              <select
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                  setPage(1);
-                }}
-                className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 outline-none"
-              >
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-              </select>
-
-              <span>
-                Showing{" "}
-                {totalCount === 0
-                  ? 0
-                  : (currentPage - 1) * pageSize + 1}
-                {" – "}
-                {Math.min(currentPage * pageSize, totalCount)} of{" "}
-                {totalCount} resumes
-              </span>
-            </div>
+            <p className="text-sm text-gray-800">
+              Showing{" "}
+              {totalCount === 0
+                ? 0
+                : (currentPage - 1) * pageSize + 1}
+              –
+              {Math.min(currentPage * pageSize, totalCount)}
+              {" "}of {totalCount} resumes
+            </p>
 
             <div className="flex items-center gap-2">
-              {/* First Page */}
-              <button
-                type="button"
-                disabled={currentPage === 1 || loading}
-                onClick={() => setPage(1)}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
-              >
-                <ChevronsLeft size={17} />
-              </button>
 
               {/* Previous */}
               <button
                 type="button"
+                onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1 || loading}
-                onClick={() => setPage((p) => p - 1)}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                <ChevronLeft size={17} />
+                <ChevronLeft size={20} />
               </button>
 
-              {/* Current Page */}
-              <span className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white">
-                {currentPage}
-              </span>
+              {/* Page Numbers */}
+              {Array.from(
+                { length: Math.min(totalPages, 5) },
+                (_, index) => index + 1
+              ).map((number) => (
+                <button
+                  key={number}
+                  type="button"
+                  onClick={() => goToPage(number)}
+                  disabled={loading}
+                  className={`h-10 min-w-10 rounded-lg border px-3 text-sm font-semibold ${
+                    currentPage === number
+                      ? "border-blue-600 bg-blue-600 text-white"
+                      : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+
+              {/* Last Page */}
+              {totalPages > 5 && (
+                <>
+                  <span className="px-1 text-gray-600">...</span>
+
+                  <button
+                    type="button"
+                    onClick={() => goToPage(totalPages)}
+                    disabled={loading}
+                    className={`h-10 min-w-10 rounded-lg border px-3 text-sm font-semibold ${
+                      currentPage === totalPages
+                        ? "border-blue-600 bg-blue-600 text-white"
+                        : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
 
               {/* Next */}
               <button
                 type="button"
-                disabled={currentPage >= totalPages || loading}
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages || loading}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {Math.min(currentPage + 1, totalPages)}
+                <ChevronRightIcon size={20} />
               </button>
 
-              {/* Last Page */}
-              <button
-                type="button"
-                disabled={currentPage >= totalPages || loading}
-                onClick={() => setPage(totalPages)}
-                className="rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
-              >
-                <ChevronsRight size={17} />
-              </button>
             </div>
           </div>
 

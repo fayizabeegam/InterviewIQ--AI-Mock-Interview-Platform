@@ -69,7 +69,7 @@ export default function AdminUsers() {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const pageSize = 8;
 
   // Account status confirmation
   const [updatingId, setUpdatingId] = useState(null);
@@ -170,23 +170,25 @@ export default function AdminUsers() {
   ]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredUsers.length / pageSize);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredUsers.length / pageSize)
+  );
 
   const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
 
-  // Keep current page valid when filtering or changing page size
+  const goToPage = (nextPage) =>
+    setCurrentPage(
+      Math.min(totalPages, Math.max(1, nextPage))
+    );
+
+  // Reset page when search or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, statusFilter, verificationFilter, dateFrom, dateTo, pageSize]);
-
-  useEffect(() => {
-    if (totalPages > 0 && currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  }, [search, statusFilter, verificationFilter, dateFrom, dateTo]);
 
   // Reset filters
   const resetFilters = () => {
@@ -250,12 +252,10 @@ export default function AdminUsers() {
             {error}
           </div>
         )}
+
         {/* Page Header */}
         <div className="flex flex-wrap items-center justify-between gap-4">
-          
-          <div>
-            
-          </div>
+          <div></div>
 
           <button
             type="button"
@@ -338,7 +338,10 @@ export default function AdminUsers() {
                 />
                 <input
                   value={search}
-                  onChange={(event) => setSearch(event.target.value)}
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    setCurrentPage(1);
+                  }}
                   placeholder="Search name, email or username..."
                   aria-label="Search users"
                   className="h-11 w-full rounded-xl border border-slate-200 pl-10 pr-4 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:w-72"
@@ -382,7 +385,10 @@ export default function AdminUsers() {
                 </label>
                 <select
                   value={statusFilter}
-                  onChange={(event) => setStatusFilter(event.target.value)}
+                  onChange={(event) => {
+                    setStatusFilter(event.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-400"
                 >
                   <option value="All">All statuses</option>
@@ -397,7 +403,10 @@ export default function AdminUsers() {
                 </label>
                 <select
                   value={verificationFilter}
-                  onChange={(event) => setVerificationFilter(event.target.value)}
+                  onChange={(event) => {
+                    setVerificationFilter(event.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-400"
                 >
                   <option value="All">All verification statuses</option>
@@ -414,7 +423,10 @@ export default function AdminUsers() {
                   type="date"
                   max={dateTo || undefined}
                   value={dateFrom}
-                  onChange={(event) => setDateFrom(event.target.value)}
+                  onChange={(event) => {
+                    setDateFrom(event.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-400"
                 />
               </div>
@@ -427,7 +439,10 @@ export default function AdminUsers() {
                   type="date"
                   min={dateFrom || undefined}
                   value={dateTo}
-                  onChange={(event) => setDateTo(event.target.value)}
+                  onChange={(event) => {
+                    setDateTo(event.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-400"
                 />
               </div>
@@ -580,52 +595,72 @@ export default function AdminUsers() {
 
           {/* Pagination */}
           {!loading && filteredUsers.length > 0 && (
-            <div className="flex flex-col gap-3 border-t border-slate-100 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-5 py-3">
 
-              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
-                <span>Rows per page</span>
-
-                <select
-                  value={pageSize}
-                  onChange={(event) => setPageSize(Number(event.target.value))}
-                  className="rounded-lg border border-slate-200 bg-white px-2 py-2 outline-none"
-                >
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                </select>
-
-                <span>
-                  Showing {((currentPage - 1) * pageSize) + 1}–
-                  {Math.min(currentPage * pageSize, filteredUsers.length)} of{" "}
-                  {filteredUsers.length}
-                </span>
-              </div>
+              <p className="text-sm text-slate-800">
+                Showing{" "}
+                {(currentPage - 1) * pageSize + 1}
+                –
+                {Math.min(currentPage * pageSize, filteredUsers.length)}
+                {" "}of {filteredUsers.length} users
+              </p>
 
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  disabled={currentPage <= 1}
-                  onClick={() => setCurrentPage((page) => page - 1)}
-                  className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50 disabled:opacity-40"
-                  aria-label="Previous page"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-
-                <span className="px-2 text-sm font-semibold text-slate-700">
-                  {currentPage} / {Math.max(totalPages, 1)}
-                </span>
 
                 <button
                   type="button"
-                  disabled={currentPage >= totalPages}
-                  onClick={() => setCurrentPage((page) => page + 1)}
-                  className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50 disabled:opacity-40"
-                  aria-label="Next page"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  <ChevronRight size={18} />
+                  <ChevronLeft size={20} />
                 </button>
+
+                {Array.from(
+                  { length: Math.min(totalPages, 5) },
+                  (_, index) => index + 1
+                ).map((number) => (
+                  <button
+                    key={number}
+                    type="button"
+                    onClick={() => goToPage(number)}
+                    className={`h-10 min-w-10 rounded-lg border px-3 text-sm font-semibold ${
+                      currentPage === number
+                        ? "border-blue-600 bg-blue-600 text-white"
+                        : "border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                ))}
+
+                {totalPages > 5 && (
+                  <>
+                    <span className="px-1 text-slate-600">...</span>
+
+                    <button
+                      type="button"
+                      onClick={() => goToPage(totalPages)}
+                      className={`h-10 min-w-10 rounded-lg border px-3 text-sm font-semibold ${
+                        currentPage === totalPages
+                          ? "border-blue-600 bg-blue-600 text-white"
+                          : "border-slate-200 bg-white text-slate-900"
+                      }`}
+                    >
+                      {totalPages}
+                    </button>
+                  </>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronRight size={20} />
+                </button>
+
               </div>
             </div>
           )}
