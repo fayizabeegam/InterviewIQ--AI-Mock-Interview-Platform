@@ -50,15 +50,12 @@ class VerifyEmailView(GenericAPIView):
         email = serializer.validated_data["email"]
         entered_otp = serializer.validated_data["otp"]
 
-        # print("EMAIL:", email)
-        # print("ENTERED OTP:", entered_otp)
-
         user = User.objects.filter(email=email).first()
 
-        # print("USER:", user)
-
         if not user:
-            raise ValueError("User not found.")
+            raise ValidationError({
+                "email": "User not found."
+            })
 
         
 
@@ -101,6 +98,11 @@ class ResendOTPView(GenericAPIView):
         email = serializer.validated_data["email"]
 
         user = User.objects.filter(email=email).first()
+
+        if not user:
+            raise ValidationError({
+                "email": "User not found."
+            })
 
         if user.is_email_verified:
             raise ValidationError(
@@ -155,7 +157,12 @@ class ForgotPasswordView(GenericAPIView):
 
         email = serializer.validated_data["email"]
 
-        user = User.objects.get(email=email)
+        user = User.objects.filter(email=email).first()
+
+        if not user:
+            raise ValidationError({
+                "email": "User not found."
+            })
 
         send_password_reset_email(user)
 
@@ -225,7 +232,7 @@ class ChangePasswordView(GenericAPIView):
         validate_otp(otp_obj, otp)
 
         user.set_password(password)
-        user.save()
+        user.save(update_fields=["password"])
 
         otp_obj.is_verified = True
         otp_obj.save(update_fields=["is_verified"])
