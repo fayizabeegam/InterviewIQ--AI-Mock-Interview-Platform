@@ -3,10 +3,10 @@ name: InterviewIQ CI Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, backend-testing]
 
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, backend-testing]
 
 jobs:
 
